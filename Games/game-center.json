@@ -1,0 +1,201 @@
+{
+  "ok": "false",
+  "gamesConfig": [
+    {
+      "game_url": "https://y0red.github.io/FlyBird_Build/Games/NewGame1/",
+      "game_short_name": "guzogeez",
+      "game_name": "Guzo Geez Game",
+      "game_status": "PUBLISHED",
+      "game_share_link": "https://t.me/y0games_bot/guzogeez"
+    },
+    {
+      "game_url": "https://y0red.github.io/FlyBird_Build/Games/NewGame2/",
+      "game_short_name": "PGA",
+      "game_name": "Flap Tap Game",
+      "game_status": "PUBLISHED",
+      "game_share_link": "https://t.me/y0games_bot/PGA"
+    }
+  ],
+    "games": [
+    {
+      "game_description": "2048",
+      "game_id": 1,
+      "game_image_url": "https://games.fun.et/2048/banner/banner.png",
+      "game_name": "2048",
+      "game_short_name": "2048",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/2048/"
+    },
+    {
+      "game_description": "Taxi Mash",
+      "game_id": 2,
+      "game_image_url": "https://games.fun.et/taximash/banner/banner.png",
+      "game_name": "Taxi Mash",
+      "game_short_name": "Taxi Mash",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/taximash/"
+    },
+    {
+      "game_description": "Addis Tile",
+      "game_id": 3,
+      "game_image_url": "https://games.fun.et/addistile/banner/banner.png",
+      "game_name": "Addis Tile",
+      "game_short_name": "Addis Tile",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/addistile/"
+    },
+    {
+      "game_description": "Addis Flap Tap",
+      "game_id": 4,
+      "game_image_url": "https://y0red.github.io/FlyBird_Build/Games/screenshot512x384.jpg",
+      "game_name": "Flap Tap",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://y0red.github.io/FlyBird_Build/Games/NewGame2/"
+    },
+      {
+      "game_description": "Monster Truck",
+      "game_id": 5,
+      "game_image_url": "https://games.fun.et/MonsterTruck/icons/icon-256.png",
+      "game_name": "Monster Truck",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/MonsterTruck"
+    },
+      {
+      "game_description": "Rope Merge",
+      "game_id": 6,
+      "game_image_url": "https://games.fun.et/RopeMerge/icons/icon-512.png",
+      "game_name": "Rope Merge",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/Rope Merge"
+    },
+      {
+      "game_description": "Screw Puzzle",
+      "game_id": 7,
+      "game_image_url": "https://games.fun.et/ScrewPuzzle/icons/icon-512.png",
+      "game_name": "Screw Puzzle",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/ScrewPuzzle"
+    },
+      {
+      "game_description": "Screw Puzzle",
+      "game_id": 8,
+      "game_image_url": "https://games.fun.et/duckshooter/icons/icon-256.png",
+      "game_name": "Duck Shooter",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/duckshooter"
+    },
+      {
+      "game_description": "Fruit Snake",
+      "game_id": 9,
+      "game_image_url": "https://games.fun.et/fruitsnake/icons/icon-256.png",
+      "game_name": "Fruit Snake",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/fruitsnake"
+    },
+      {
+      "game_description": "Halloween Memory",
+      "game_id": 10,
+      "game_image_url": "https://games.fun.et/halloweenmemory/icons/icon-256.png",
+      "game_name": "Halloween Memory",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/halloweenmemory"
+    },
+      {
+      "game_description": "liquid Sort",
+      "game_id": 11,
+      "game_image_url": "https://games.fun.et/liquidSort/assets/logo.png",
+      "game_name": "Screw Puzzle",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/liquidSort"
+    },
+      {
+      "game_description": "Neon Bricks",
+      "game_id": 12,
+      "game_image_url": "https://games.fun.et/neonbricks/icon-256.png",
+      "game_name": "Neon Bricks",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/neonbricks"
+    },
+      {
+      "game_description": "Ninja Run",
+      "game_id": 13,
+      "game_image_url": "https://games.fun.et/ninjarun/icons/icon-256.png",
+      "game_name": "Ninja Run",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/ninjarun"
+    },
+      {
+      "game_description": "Plumber",
+      "game_id": 14,
+      "game_image_url": "https://games.fun.et/plumber/icons/icon-256.png",
+      "game_name": "Neon Bricks",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/plumber"
+    },
+      {
+      "game_description": "Shamola",
+      "game_id": 15,
+      "game_image_url": "https://games.fun.et/shamola/icons/icon-512.png",
+      "game_name": "Shamola",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/shamola"
+    },
+      {
+      "game_description": "Space Purge",
+      "game_id": 16,
+      "game_image_url": "https://games.fun.et/spacepurge/icons/icon-256.png",
+      "game_name": "Space Purge",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/spacepurge"
+    },
+      {
+      "game_description": "Stick Monkey",
+      "game_id": 17,
+      "game_image_url": "https://games.fun.et/stickmonkey/icons/icon-256.png",
+      "game_name": "Stick Monkey",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/stickmonkey"
+    },
+      {
+      "game_description": "Sudoku",
+      "game_id": 18,
+      "game_image_url": "https://games.fun.et/sudoku/sprites/200x200.jpg",
+      "game_name": "Sudoku",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/sudoku"
+    },
+      {
+      "game_description": "Sweet Memory",
+      "game_id": 19,
+      "game_image_url": "https://games.fun.et/sweetmemory/sprites/200x200.jpg",
+      "game_name": "Sweet Memory",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/sweetmemory"
+    },
+      {
+      "game_description": "Water Melon Fruit 2048",
+      "game_id": 20,
+      "game_image_url": "https://games.fun.et/watermelonfruit2048/icons/icon-512.png",
+      "game_name": "Water Melon Fruit 2048",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://games.fun.et/watermelonfruit2048"
+    }
+  ]
+}

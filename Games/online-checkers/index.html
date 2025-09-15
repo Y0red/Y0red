@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Start loading assets right away, to have them (partly) loaded already when they are requested -->
+  <link rel="preload" href="Build//bd2adac9cc1b3a78df4aeec9cf0ce772.data.unityweb" as="fetch" type="application/octet-stream" crossorigin>
+  <link rel="preload" href="Build/51f4eebb1193cd3fd0a0e6cf69c6d8d5.framework.js.unityweb" as="script">
+  <link rel="preload" href="Build/98bc3445c96272d0a80870e98a815411.wasm.unityweb" as="fetch" type="application/wasm" crossorigin>
+  <title>online-checkers</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="manifest" href="manifest.webmanifest">
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    html {
+      /* fix mobile viewport menu bar on iOS */
+      height: -webkit-fill-available;
+    }
+
+    body {
+      height: 100%;
+      /* fix mobile viewport menu bar on iOS */
+      height: -webkit-fill-available;
+      width: 100%;
+      text-align: center;
+    }
+
+    #unity-container {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #222;
+    }
+
+    /* Default values, might be overwritten by aspect ratio media queries */
+    #unity-canvas {
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+    }
+
+    @media (min-aspect-ratio: 3/1) {
+      #unity-canvas {
+        width: auto;
+        height: 100%;
+        aspect-ratio: 3/1;
+      }
+    }
+
+    @media (max-aspect-ratio: 1/2) {
+      #unity-canvas {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1/2;
+      }
+    }
+
+    #unity-loading-container {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 40px;
+
+      opacity: 1;
+      visibility: visible;
+      transition: 800ms linear;
+    }
+
+    #unity-loading-container.finished {
+      opacity: 0;
+      visibility: collapse;
+    }
+
+    #unity-loading-container .logo {
+      width: 15%;
+      height: 15%;
+    }
+
+    #unity-loading-bar {
+      position: relative;
+      width: 40%;
+      height: 10px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    #unity-loading-bar-inner {
+      position: absolute;
+      left: 0%;
+      top: 0%;
+      width: 1%;
+      height: 100%;
+      background-color: #ccc;
+      border-radius: 10px;
+      transition: 400ms linear;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="unity-container">
+    <canvas id="unity-canvas"></canvas>
+  </div>
+  <div id="unity-loading-container">
+    <img src="logo.svg" class="logo" alt="Logo y0red">
+    <div id="unity-loading-bar">
+      <div id="unity-loading-bar-inner"></div>
+    </div>
+  </div>
+  <script src="Build/fc67756223b0055e6f06e0ba592f2a72.loader.js"></script>
+  <script>
+	window.addEventListener("load", function () {
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.register("ServiceWorker.js");
+        }
+      });
+
+    var buildUrl = "Build";
+    var loaderUrl = buildUrl + "/fc67756223b0055e6f06e0ba592f2a72.loader.js";
+    var config = {
+      dataUrl: buildUrl + "/bd2adac9cc1b3a78df4aeec9cf0ce772.data.unityweb",
+      frameworkUrl: buildUrl + "/51f4eebb1193cd3fd0a0e6cf69c6d8d5.framework.js.unityweb",
+      codeUrl: buildUrl + "/98bc3445c96272d0a80870e98a815411.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "y0red",
+      productName: "online-checkers",
+      productVersion: "1.4.0",
+    };
+
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if(isMobile) {
+      // Define a maximum pixel ratio for mobile to avoid rendering at too high resolutions
+      const maxPixelRatioMobile = 2.0;
+      config.devicePixelRatio = Math.min(window.devicePixelRatio, maxPixelRatioMobile);
+
+	var canvas = document.querySelector("#unity-canvas");
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.position = "fixed";
+    }
+
+    var canvas = document.querySelector("#unity-canvas");
+    var loadingContainer = document.querySelector("#unity-loading-container");
+    var loadingBar = document.querySelector("#unity-loading-bar-inner");
+
+    var unityGame;
+    var script = document.createElement("script");
+    script.src = loaderUrl;
+    script.onload = function() {
+      createUnityInstance(canvas, config, function(progress) {
+        loadingBar.style.width = 100 * progress + "%";
+      }).then(function(unityInstance) {
+        unityGame = unityInstance;
+        loadingContainer.classList.add("finished");
+      }).catch(function(message) {
+        alert(message);
+      });
+    };
+    document.body.appendChild(script);
+  </script>
+  <!-- Parse Unity rich text to render stylized browser console logs -->
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Start loading assets right away, to have them (partly) loaded already when they are requested -->
+  <link rel="preload" href="Build//f93f7c8560411991493d56672efd32e9.data.unityweb" as="fetch" type="application/octet-stream" crossorigin>
+  <link rel="preload" href="Build/f33a12f00a432fe01fa43a62ed564b4a.js.unityweb" as="script">
+  <link rel="preload" href="Build/79935dd322efd0182e202c36862d6f38.wasm.unityweb" as="fetch" type="application/wasm" crossorigin>
+  <title>GuzoGeez</title>
+<style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    html {
+      /* fix mobile viewport menu bar on iOS */
+      height: -webkit-fill-available;
+    }
+
+    body {
+      height: 100%;
+      /* fix mobile viewport menu bar on iOS */
+      height: -webkit-fill-available;
+      width: 100%;
+      text-align: center;
+    }
+
+    #unity-container {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Default values, might be overwritten by aspect ratio media queries */
+    #unity-canvas {
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+    }
+
+
+
+    #unity-loading-container {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 40px;
+
+      opacity: 1;
+      visibility: visible;
+      transition: 800ms linear;
+    }
+
+    #unity-loading-container.finished {
+      opacity: 0;
+      visibility: collapse;
+    }
+
+    #unity-loading-container .logo {
+      width: 100%;
+      height: 100%;
+    }
+
+    #unity-loading-bar {
+	position: absolute;
+      left: 30%;
+      top: 70%;
+      width: 40%;
+      height: 10px;
+      background-color: #fff;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+    }
+
+    #unity-loading-bar-inner {
+      position: absolute;
+      left: 0%;
+      top: 0%;
+      width: 1%;
+      height: 100%;
+      background-color: #ccc;
+      border-radius: 10px;
+      transition: 400ms linear;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="unity-container">
+    <canvas id="unity-canvas"></canvas>
+  </div>
+  <div id="unity-loading-container">
+    <img src="logo.svg" class="logo" alt="Logo Y@RED">
+    <div id="unity-loading-bar">
+      <div id="unity-loading-bar-inner"></div>
+    </div>
+  </div>
+  <script src="Build/GuzoGeez_Final.loader.js"></script>
+  <script>
+    var API = "https://y0red.github.io/FlyBird_Build/StreamingAssets/main";
+    var buildUrl = "Build";
+    var loaderUrl = buildUrl + "/GuzoGeez_Final.loader.js";
+    var config = {
+      dataUrl: buildUrl + "/f93f7c8560411991493d56672efd32e9.data.unityweb",
+      frameworkUrl: buildUrl + "/f33a12f00a432fe01fa43a62ed564b4a.js.unityweb",
+      codeUrl: buildUrl + "/79935dd322efd0182e202c36862d6f38.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "Y@RED",
+      productName: "GuzoGeez",
+      productVersion: "1.0",
+    };
+
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if(isMobile) {
+      // Define a maximum pixel ratio for mobile to avoid rendering at too high resolutions
+      const maxPixelRatioMobile = 2.0;
+      config.devicePixelRatio = Math.min(window.devicePixelRatio, maxPixelRatioMobile);
+    }
+
+    var canvas = document.querySelector("#unity-canvas");
+    var loadingContainer = document.querySelector("#unity-loading-container");
+    var loadingBar = document.querySelector("#unity-loading-bar-inner");
+
+    var unityGame;
+    var script = document.createElement("script");
+    script.src = loaderUrl;
+    script.onload = function() {
+      createUnityInstance(canvas, config, function(progress) {
+        loadingBar.style.width = 100 * progress + "%";
+      }).then(function(unityInstance) {
+        unityGame = unityInstance;
+        //loadingContainer.classList.add("finished");
+      }).catch(function(message) {
+        alert(message);
+      });
+    };
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>

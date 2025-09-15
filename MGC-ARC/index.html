@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis: WebKit vs. Native Modules</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: "Cool Slate" - A calm, professional palette using slate grays, with muted teal and indigo as primary accents for the two technologies to ensure clarity and visual distinction. -->
+    <!-- Application Structure Plan: The SPA is designed as an interactive decision-support tool, moving away from the linear report format. The user journey starts with a high-level interactive comparison dashboard (the core of the app), allowing users to click on criteria to see details and visualizations. This caters to users needing a quick overview. For those needing more depth, subsequent sections offer tabbed "deep dives" into platform specifics, a visual explorer for app store policies, and finally, an interactive "Recommendation Helper" that makes the report's conclusion actionable. This structure supports both quick scanning and deep exploration, making the complex information highly accessible and user-centric. -->
+    <!-- Visualization & Content Choices: Report Info -> Key criteria for choosing a tech stack (e.g., Performance, UX). Goal -> Allow users to easily compare WebKit vs. Native Modules. Viz/Method -> An interactive side-by-side comparison. Clicking a criterion (e.g., 'Performance') updates a details section with pros/cons and a Chart.js horizontal bar chart visually representing the rating (e.g., Low, Medium, High). Interaction -> Click-to-update. Justification -> This is more engaging than a static table and allows users to focus on what matters to them. Library/Method -> Chart.js for the rating bars, custom JS for interactivity, and Tailwind CSS for diagrams, ensuring no SVG/Mermaid is used. The app store policy section uses a simple selection mechanism to filter complex information, enhancing clarity. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s forwards;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .nav-button.active {
+            background-color: #4338ca; /* indigo-700 */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .tab-button.active {
+            border-color: #4338ca;
+            color: #4338ca;
+            background-color: #eef2ff; /* indigo-50 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 200px;
+            max-height: 250px;
+        }
+        .smooth-transition {
+            transition: all 0.3s ease-in-out;
+        }
+        .tech-card {
+            border-left-width: 4px;
+        }
+        .webkit-card {
+            border-left-color: #14b8a6; /* teal-500 */
+        }
+        .native-card {
+            border-left-color: #6366f1; /* indigo-500 */
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-12 section-fade-in">
+            <h1 class="text-3xl md:text-5xl font-bold text-slate-900 mb-4">Game Embedding Technology Analysis</h1>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto">An interactive guide to choosing between WebKit (WebView) and Dynamic Native Modules for your mobile game center.</p>
+        </header>
+
+        <main>
+            <section id="comparison" class="mb-16 section-fade-in" style="animation-delay: 0.2s;">
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">Comparison Dashboard</h2>
+                    <p class="text-slate-600 mb-6">This section provides a side-by-side comparison of the two technologies. Click on a criterion from the list below to see a detailed breakdown and a visual representation of how each approach stacks up. This allows you to focus on the factors most important for your project.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                        <div class="md:col-span-4 lg:col-span-3">
+                            <h3 class="font-semibold text-lg mb-4 text-slate-700">Select a Criterion:</h3>
+                            <div id="criteria-buttons" class="flex flex-col space-y-2">
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-8 lg:col-span-9">
+                            <h3 id="criterion-title" class="text-xl font-bold text-indigo-700 mb-4"></h3>
+                            <div class="chart-container mb-6">
+                                <canvas id="comparisonChart"></canvas>
+                            </div>
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div id="webkit-details" class="tech-card webkit-card bg-slate-50 p-4 rounded-lg smooth-transition"></div>
+                                <div id="native-details" class="tech-card native-card bg-slate-50 p-4 rounded-lg smooth-transition"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="communication" class="mb-16 section-fade-in" style="animation-delay: 0.4s;">
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">Communication Mechanisms</h2>
+                    <p class="text-slate-600 mb-6">Understanding how the main application communicates with the embedded game is crucial for features like leaderboards or authentication. This section visually breaks down the communication flow for both WebKit and Native Module approaches.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 flex items-center"><span class="w-3 h-3 rounded-full bg-teal-500 mr-3"></span>WebKit (WebView)</h3>
+                            <div class="border-2 border-dashed border-slate-300 rounded-lg p-4 h-full">
+                                <div class="text-center font-semibold text-slate-700">Parent Native App</div>
+                                <div class="flex justify-center my-2">
+                                    <span class="text-3xl text-slate-400">&darr;</span>
+                                    <span class="text-xs text-slate-500 mx-2 self-center">JS Injection</span>
+                                </div>
+                                <div class="text-center font-bold text-teal-600">JavaScript Bridge</div>
+                                <div class="flex justify-center my-2">
+                                    <span class="text-xs text-slate-500 mx-2 self-center">Message Passing</span>
+                                    <span class="text-3xl text-slate-400">&uarr;</span>
+                                </div>
+                                <div class="text-center font-semibold text-slate-700">HTML5 Game</div>
+                                <p class="text-xs text-slate-500 mt-4">Communication is asynchronous and relies on string-based messages (often JSON) passed through a secure bridge, requiring careful implementation to prevent vulnerabilities.</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 flex items-center"><span class="w-3 h-3 rounded-full bg-indigo-500 mr-3"></span>Dynamic Native Modules</h3>
+                            <div class="border-2 border-dashed border-slate-300 rounded-lg p-4 h-full">
+                                <div class="text-center font-semibold text-slate-700">Parent Native App</div>
+                                <div class="flex justify-center my-2">
+                                    <span class="text-3xl text-slate-400">&harr;</span>
+                                    <span class="text-xs text-slate-500 mx-2 self-center">Direct Method Calls / Protocols</span>
+                                </div>
+                                <div class="text-center font-semibold text-slate-700">Native Game Module</div>
+                                <p class="text-xs text-slate-500 mt-4">Communication is direct, performant, and can be synchronous or asynchronous. It allows for rich data exchange using native objects and defined API contracts (interfaces/protocols), as both run in the same process space.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="policies" class="mb-16 section-fade-in" style="animation-delay: 0.6s;">
+                 <div class="bg-white p-6 md:p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">App Store Policy Explorer</h2>
+                     <p class="text-slate-600 mb-6">Navigating app store rules is essential. Select a store to see a summary of key policies regarding dynamic content for both WebKit and Native Module approaches. This highlights the compliance landscape you need to be aware of.</p>
+                    <div class="flex justify-center space-x-4 mb-6">
+                        <button id="apple-policy-btn" class="policy-tab-button px-4 py-2 rounded-lg font-semibold smooth-transition">Apple App Store</button>
+                        <button id="google-policy-btn" class="policy-tab-button px-4 py-2 rounded-lg font-semibold smooth-transition">Google Play Store</button>
+                    </div>
+                    <div id="policy-display" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    </div>
+                 </div>
+            </section>
+
+            <section id="recommendation" class="section-fade-in" style="animation-delay: 0.8s;">
+                <div class="bg-indigo-700 text-white p-6 md:p-8 rounded-xl shadow-lg">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-2">Strategic Recommendation Helper</h2>
+                    <p class="text-indigo-200 mb-6">The best technology choice depends on your project's main priority. Select your most important goal from the dropdown to receive a tailored recommendation based on the findings of the report.</p>
+                    <div class="flex flex-col sm:flex-row items-center gap-4">
+                        <label for="priority-selector" class="font-semibold text-lg whitespace-nowrap">My top priority is:</label>
+                        <select id="priority-selector" class="w-full sm:w-auto flex-grow bg-white text-slate-800 p-3 rounded-lg border-2 border-transparent focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <option value="performance">Highest Performance & Best UX</option>
+                            <option value="speed">Rapid Deployment & Code Re-use</option>
+                            <option value="complexity">Support for Complex, Demanding Games</option>
+                            <option value="agility">Update Agility for Simple Games</option>
+                        </select>
+                    </div>
+                    <div id="recommendation-result" class="mt-6 bg-indigo-800 p-6 rounded-lg smooth-transition">
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+<script>
+const reportData = {
+    criteria: {
+        performance: {
+            title: "Performance",
+            score: { webkit: 1, native: 3 },
+            webkit: {
+                title: "WebKit: Lower to Medium",
+                summary: "Performance is limited by JavaScript execution speed and DOM rendering overhead. While optimizable with WebGL, it struggles with complex, graphically intensive, or physics-heavy games compared to native.",
+                points: ["Slower load times", "Potential for stuttering animations", "Dependent on OS WebView engine version"]
+            },
+            native: {
+                title: "Native Modules: High",
+                summary: "Games run as fully compiled native code, ensuring the best possible performance, responsiveness, and access to device processing power. Ideal for demanding games.",
+                points: ["Fast, direct execution", "Smooth, high-framerate animations", "Full access to GPU via Metal/Vulkan"]
+            }
+        },
+        ux: {
+            title: "User Experience & Native Feel",
+            score: { webkit: 2, native: 3 },
+            webkit: {
+                title: "WebKit: Medium",
+                summary: "Can feel less integrated. May exhibit browser-like behaviors (selection pop-ups, inconsistent scrolling) and might not perfectly match native UI conventions.",
+                points: ["Risk of non-native feel", "UI inconsistencies across OS versions", "Harder to implement seamless transitions"]
+            },
+            native: {
+                title: "Native Modules: High",
+                summary: "Provides a seamless user experience, indistinguishable from the main app. Adheres perfectly to platform UI/UX conventions for a polished, consistent feel.",
+                points: ["Truly native look and feel", "Platform-consistent interactions", "Smooth, integrated transitions"]
+            }
+        },
+        development: {
+            title: "Development Effort & Speed",
+            score: { webkit: 3, native: 1 },
+            webkit: {
+                title: "WebKit: Lower Effort (for Web Games)",
+                summary: "Significantly faster if games are already HTML5 or the team has web expertise. A single game codebase can serve both Android and iOS, speeding up deployment.",
+                points: ["Cross-platform game code", "Large ecosystem of HTML5 engines", "Faster time-to-market for simple games"]
+            },
+            native: {
+                title: "Native Modules: Higher Effort",
+                summary: "Requires more upfront investment in setting up dynamic delivery. Each game must be developed as a platform-specific native module (iOS/Android), increasing effort per game.",
+                points: ["Platform-specific development", "Higher initial setup complexity", "Longer development cycle per game"]
+            }
+        },
+        agility: {
+            title: "Update Agility",
+            score: { webkit: 3, native: 2 },
+            webkit: {
+                title: "WebKit: High (with caveats)",
+                summary: "Game assets and logic (JavaScript) can potentially be updated from a server, bypassing a full app store update. However, this is heavily scrutinized by app stores, especially Apple.",
+                points: ["Can update content without app release", "Subject to strict store policies", "Risks rejection if functionality changes significantly"]
+            },
+            native: {
+                title: "Native Modules: Low to Medium",
+                summary: "Updates to game logic (code) typically require submitting a new app version for review. Game assets can be updated more flexibly via ODR/DFM or from a server.",
+                points: ["Code changes require app store review", "Slower update cycle for logic", "Tied to platform release process"]
+            }
+        },
+        security: {
+            title: "Security Risks",
+            score: { webkit: 2, native: 3 },
+            webkit: {
+                title: "WebKit: Medium Risk",
+                summary: "The primary risks stem from web vulnerabilities like Cross-Site Scripting (XSS) if loading untrusted content. The JavaScript bridge is a critical chokepoint that must be secured.",
+                points: ["Vulnerable to XSS attacks", "Insecure bridge can expose native APIs", "Requires careful vetting of all web content"]
+            },
+            native: {
+                title: "Native Modules: Lower Risk (via Stores)",
+                summary: "Code provenance and integrity are largely guaranteed by Google Play and the App Store. The main risk is that a vetted-but-malicious module runs with the host app's permissions.",
+                points: ["Code is signed and verified by the store", "Mitigates man-in-the-middle attacks", "Loaded code still inherits app permissions"]
+            }
+        }
+    },
+    policies: {
+        apple: {
+            title: "Apple App Store",
+            webkit: {
+                title: "WebKit (HTML5 Games)",
+                summary: "Permitted under Guideline 4.7 but with high developer responsibility. The app must not expose native APIs without permission, and must get separate user consent for data sharing with each mini-game.",
+                points: ["✅ Allowed with strict conditions", "⛔ No exposing native APIs without permission", "⚠️ High bar for privacy & user consent"]
+            },
+            native: {
+                title: "Dynamic Native Modules",
+                summary: "Loading native code is only allowed via Apple's sanctioned On-Demand Resources (ODR) system. Code must be signed and submitted for review as part of the app bundle.",
+                points: ["✅ Allowed only via On-Demand Resources (ODR)", "⛔ Downloading executable code from other sources is prohibited", "ℹ️ Code updates require new app submission"]
+            }
+        },
+        google: {
+            title: "Google Play Store",
+            webkit: {
+                title: "WebKit (HTML5 Games)",
+                summary: "Explicitly allowed. The policy carves out an exception for JavaScript running in a WebView. The developer is responsible for ensuring the loaded web code doesn't violate other policies.",
+                points: ["✅ Explicitly permitted", "ℹ️ More flexibility for remote JS updates", "⚠️ App is responsible for hosted content's behavior"]
+            },
+            native: {
+                title: "Dynamic Native Modules",
+                summary: "Loading native code is only allowed via Google's sanctioned Play Feature Delivery. This is the recommended and secure method for on-demand native features.",
+                points: ["✅ Allowed only via Play Feature Delivery", "⛔ Downloading .dex or .so files from other sources is prohibited", "ℹ️ Secure and managed by Google Play"]
+            }
+        }
+    },
+    recommendations: {
+        performance: {
+            title: "Recommendation: Dynamic Native Modules",
+            text: "For the highest possible performance, a seamless native user experience, and the ability to support complex, graphically-rich games, Dynamic Native Modules are the clear choice. This approach provides direct access to device hardware and eliminates the overhead of a web environment."
+        },
+        speed: {
+            title: "Recommendation: WebKit (WebView)",
+            text: "If your priority is rapid deployment of many simple or casual games, and you want to reuse a single HTML5 codebase across platforms, the WebKit approach is more efficient. It significantly reduces platform-specific development time, especially if your team has strong web development skills."
+        },
+        complexity: {
+            title: "Recommendation: Dynamic Native Modules",
+            text: "To support demanding games with complex logic, physics, and deep integration with native OS features (advanced camera, sensors, etc.), you must use Dynamic Native Modules. WebKit's sandboxed environment cannot provide the necessary access or performance for these use cases."
+        },
+        agility: {
+            title: "Recommendation: WebKit (WebView)",
+            text: "For maximum agility in updating content for simple casual games, WebKit offers the potential to refresh game assets and logic from a server. However, this must be implemented carefully to comply with strict app store rules, particularly on iOS, to avoid rejection."
+        }
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const criteriaButtonsContainer = document.getElementById('criteria-buttons');
+    const criterionTitle = document.getElementById('criterion-title');
+    const webkitDetailsContainer = document.getElementById('webkit-details');
+    const nativeDetailsContainer = document.getElementById('native-details');
+    
+    const applePolicyBtn = document.getElementById('apple-policy-btn');
+    const googlePolicyBtn = document.getElementById('google-policy-btn');
+    const policyDisplay = document.getElementById('policy-display');
+
+    const prioritySelector = document.getElementById('priority-selector');
+    const recommendationResult = document.getElementById('recommendation-result');
+
+    let comparisonChart;
+
+    function createCriteriaButton(id, title, isActive = false) {
+        const button = document.createElement('button');
+        button.id = `btn-${id}`;
+        button.textContent = title;
+        button.className = `nav-button w-full text-left px-4 py-3 rounded-lg font-semibold smooth-transition ${isActive ? 'active' : 'bg-slate-100 hover:bg-slate-200'}`;
+        button.addEventListener('click', () => {
+            updateComparisonView(id);
+            document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active', 'bg-slate-100', 'hover:bg-slate-200'));
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                if(btn.id === `btn-${id}`){
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.add('bg-slate-100', 'hover:bg-slate-200');
+                }
+            });
+        });
+        return button;
+    }
+    
+    function renderDetails(container, data) {
+        const { title, summary, points } = data;
+        container.innerHTML = `
+            <h4 class="font-bold text-lg mb-2">${title}</h4>
+            <p class="text-sm text-slate-600 mb-3">${summary}</p>
+            <ul class="space-y-1">
+                ${points.map(point => `<li class="flex items-start text-sm"><span class="mr-2 mt-1 text-emerald-500">✔</span><span>${point}</span></li>`).join('')}
+            </ul>
+        `;
+    }
+
+    function updateComparisonChart(data) {
+        const { webkit, native } = data.score;
+        const labels = ['Lower', 'Medium', 'Higher'];
+        
+        if (comparisonChart) {
+            comparisonChart.destroy();
+        }
+        
+        const ctx = document.getElementById('comparisonChart').getContext('2d');
+        comparisonChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['WebKit', 'Native Modules'],
+                datasets: [{
+                    label: data.title,
+                    data: [webkit, native],
+                    backgroundColor: ['#14b8a6', '#6366f1'],
+                    borderColor: ['#0f766e', '#4338ca'],
+                    borderWidth: 1,
+                    barPercentage: 0.5,
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 3,
+                        ticks: {
+                           callback: function(value, index, values) {
+                                return labels[value-1] || '';
+                           },
+                           stepSize: 1
+                        },
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function updateComparisonView(criterionId) {
+        const criterion = reportData.criteria[criterionId];
+        criterionTitle.textContent = criterion.title;
+        renderDetails(webkitDetailsContainer, criterion.webkit);
+        renderDetails(nativeDetailsContainer, criterion.native);
+        updateComparisonChart(criterion);
+    }
+
+    function renderPolicyView(storeId) {
+        const policy = reportData.policies[storeId];
+        document.querySelectorAll('.policy-tab-button').forEach(btn => btn.classList.remove('active', 'bg-indigo-600', 'text-white'));
+        
+        const activeBtn = document.getElementById(`${storeId}-policy-btn`);
+        activeBtn.classList.add('active', 'bg-indigo-600', 'text-white');
+
+        function createPolicyCard(data, techClass) {
+            return `
+                <div class="tech-card ${techClass}-card bg-slate-50 p-4 rounded-lg">
+                    <h4 class="font-bold text-lg mb-2">${data.title}</h4>
+                    <p class="text-sm text-slate-600 mb-3">${data.summary}</p>
+                    <ul class="space-y-2">
+                        ${data.points.map(point => `<li class="text-sm">${point}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+        
+        policyDisplay.innerHTML = createPolicyCard(policy.webkit, 'webkit') + createPolicyCard(policy.native, 'native');
+    }
+
+    function updateRecommendation() {
+        const priority = prioritySelector.value;
+        const recommendation = reportData.recommendations[priority];
+        recommendationResult.innerHTML = `
+            <h4 class="font-bold text-lg mb-2 text-indigo-200">${recommendation.title}</h4>
+            <p class="text-indigo-200">${recommendation.text}</p>
+        `;
+    }
+
+    // Initial setup
+    Object.keys(reportData.criteria).forEach((key, index) => {
+        const button = createCriteriaButton(key, reportData.criteria[key].title, index === 0);
+        criteriaButtonsContainer.appendChild(button);
+    });
+
+    applePolicyBtn.addEventListener('click', () => renderPolicyView('apple'));
+    googlePolicyBtn.addEventListener('click', () => renderPolicyView('google'));
+    
+    prioritySelector.addEventListener('change', updateRecommendation);
+
+    // Initial render
+    updateComparisonView('performance');
+    renderPolicyView('apple');
+    updateRecommendation();
+    
+    // Add active class to policy buttons
+    document.querySelectorAll('.policy-tab-button').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.policy-tab-button').forEach(btn => btn.classList.remove('tab-button', 'active', 'bg-white', 'text-slate-700', 'hover:bg-slate-100'));
+            this.classList.add('tab-button', 'active');
+        });
+    });
+    applePolicyBtn.classList.add('tab-button', 'active');
+    googlePolicyBtn.classList.add('bg-white', 'text-slate-700', 'hover:bg-slate-100');
+
+});
+</script>
+
+</body>
+</html>

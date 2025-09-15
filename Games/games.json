@@ -1,0 +1,119 @@
+{
+  "ok": "false",
+  "gamesConfig": [
+    {
+      "game_url": "https://y0red.github.io/FlyBird_Build/Games/online-checkers/",
+      "game_short_name": "Dama Online",
+      "game_name": "dga",
+      "game_status": "PUBLISHED",
+      "game_share_link": "https://t.me/y0games_bot/dga"
+    },
+    {
+      "game_url": "https://y0red-bingo.netlify.app/",
+      "game_short_name": "Bingo",
+      "game_name": "bpg",
+      "game_status": "PUBLISHED",
+      "game_share_link": "https://t.me/y0games_bot/bpg"
+    },
+    {
+      "game_url": "https://games.fun.et/Construct-Games/d657f2ee9d6a3e7e72999fee7ea810f8/",
+      "game_short_name": "Merge Blcok 2048",
+      "game_name": "mpg",
+      "game_status": "PUBLISHED",
+      "game_share_link": "https://t.me/y0games_bot/mpg"
+    },
+    {
+      "game_url": "https://games.fun.et/Construct-Games/0dcfdb3caf2dcc0998f250e9aba65cee/",
+      "game_short_name": "Taxi Maxh",
+      "game_name": "tpg",
+      "game_status": "PUBLISHED",
+      "game_share_link": "https://t.me/y0games_bot/tpg"
+    },
+    {
+      "game_url": "https://games.fun.et/Construct-Games/6c257268d67236605ba8a24d2fdd8437/",
+      "game_short_name": "Addis Tile",
+      "game_name": "apg",
+      "game_status": "PUBLISHED",
+      "game_share_link": "https://t.me/y0games_bot/apg"
+    },
+    {
+      "game_url": "https://y0red.github.io/FlyBird_Build/Games/NewGame1/",
+      "game_short_name": "guzogeez",
+      "game_name": "Guzo Geez Game",
+      "game_status": "PUBLISHED",
+      "game_share_link": "https://t.me/y0games_bot/guzogeez"
+    },
+    {
+      "game_url": "https://y0red.github.io/FlyBird_Build/Games/NewGame2/",
+      "game_short_name": "PGA",
+      "game_name": "Flap Tap Game",
+      "game_status": "PUBLISHED",
+      "game_share_link": "https://t.me/y0games_bot/PGA"
+    }
+  ],
+  "games": [
+    {
+      "game_description": "Dama/checkers",
+      "game_id": 3,
+      "game_image_url": "https://y0red.github.io/FlyBird_Build/Games/online-checkers/logo.png",
+      "game_name": "Dama King",
+      "game_short_name": "dga",
+      "game_status": "PUBLISHED",
+      "game_link": "https://t.me/y0games_bot/dga"
+    },
+	{
+      "game_description": "Bingo",
+      "game_id": 4,
+      "game_image_url": "https://y0red.github.io/FlyBird_Build/Games/bingo.jpeg",
+      "game_name": "Bingo",
+      "game_short_name": "bpg",
+      "game_status": "PUBLISHED",
+      "game_link": "https://t.me/y0games_bot/bpg"
+    },
+	{
+      "game_description": "Merge Block 2048",
+      "game_id": 5,
+      "game_image_url": "https://games.fun.et/icn/MergeShoot.png",
+      "game_name": "Merge 2048",
+      "game_short_name": "mpg",
+      "game_status": "PUBLISHED",
+      "game_link": "https://t.me/y0games_bot/mpg"
+    },
+	{
+      "game_description": "Addis Tile",
+      "game_id": 6,
+      "game_image_url": "https://games.fun.et/icn/AddisTile.png",
+      "game_name": "Addis Tile",
+      "game_short_name": "apg",
+      "game_status": "PUBLISHED",
+      "game_link": "https://t.me/y0games_bot/apg"
+    },
+	{
+      "game_description": "Taxi Mash",
+      "game_id": 7,
+      "game_image_url": "https://games.fun.et/icn/TaxiGame.png",
+      "game_name": "Taxi Mash",
+      "game_short_name": "TGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://t.me/y0games_bot/tpg"
+    },
+    {
+      "game_description": "Guzo Geez",
+      "game_id": 1,
+      "game_image_url": "https://y0red.github.io/FlyBird_Build/Games/guzogeezlogo.png",
+      "game_name": "Guzo Geez",
+      "game_short_name": "guzogeez",
+      "game_status": "PUBLISHED",
+      "game_link": "https://t.me/y0games_bot/guzogeez"
+    },
+    {
+      "game_description": "Flap Tap",
+      "game_id": 2,
+      "game_image_url": "https://y0red.github.io/FlyBird_Build/Games/screenshot512x384.jpg",
+      "game_name": "Flap Tap",
+      "game_short_name": "PGA",
+      "game_status": "PUBLISHED",
+      "game_link": "https://t.me/y0games_bot/PGA"
+    }
+  ]
+}
